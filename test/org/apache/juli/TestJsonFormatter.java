@@ -56,4 +56,20 @@ public class TestJsonFormatter {
 
     }
 
+    @Test
+    public void testNullMessage() throws Exception {
+
+        Formatter formatter = new JsonFormatter();
+        LogRecord logRecord = new LogRecord(Level.FINE, null);
+        logRecord.setLoggerName("test");
+
+        String result = formatter.format(logRecord);
+
+        // Verify JSON content
+        Assert.assertTrue(result.startsWith("{"));
+        JSONParser parser = new JSONParser(new StringReader(result));
+        LinkedHashMap<String,Object> json = parser.object();
+        Assert.assertEquals("", json.get("message"));
+    }
+
 }
